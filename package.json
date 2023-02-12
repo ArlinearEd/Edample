@@ -11,6 +11,6 @@
     "nuxt": "^3.1.2"
   },
   "dependencies": {
-    "@arlinear/quiz": "^0.1.0"
+    "@arlinear/quiz": "^0.2.0"
   }
 }

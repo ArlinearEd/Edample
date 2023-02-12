@@ -1,12 +1,12 @@
 <template>
-    Available quizzes:
-    <div v-for="quiz in quizzes" :key="quiz">
-        <button @click="navigateTo('/take-quiz/' + quiz)">{{ quiz }}</button>
+    Available Subjects:
+    <div v-for="folder in folders" :key="folder">
+        <button @click='navigateTo("/folder/" + folder.api_key)'>{{ folder.name }}</button>
     </div>
     <NuxtLink to="/">Home</NuxtLink>
 
 </template>
 
 <script setup>
-const quizzes = useCookie("quizzes");
+const folders = useCookie("folders");
 </script>
