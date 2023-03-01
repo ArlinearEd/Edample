@@ -15,4 +15,9 @@ export default defineNuxtConfig({
         },
     },
     ssr : false,
+    app: {
+        head: {
+          title: 'Arlinear API Demo',
+        }
+    }
 })

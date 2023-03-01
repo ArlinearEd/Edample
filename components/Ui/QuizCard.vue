@@ -12,7 +12,7 @@ const props = defineProps({
     },
     image: {
         type: String,
-        default: "/images/quiz/default.jpg",
+        default: "/images/quiz-default.jpg",
         required: false,
     },
 });
