@@ -1,11 +1,13 @@
 <template>
 <div>
 
-    <!-- Import Quiz/Folder +  -->
-    <UiModal :modalActive="modalActive">
+    <!-- Import Quiz/Folder + View Grades of quiz -->
+    <UiModal v-model:modalActive="modalActive">
+        <!-- TODO: @malek  -->
         <div v-if="modalContent == 'import' ">
             Import Quiz/Folder
         </div>
+        <!-- TODO: @malek  -->
         <div v-else-if="modalContent == 'grades' ">
             View Grades
         </div>
@@ -16,6 +18,7 @@
     <div class="w-full max-w-[1000px] mx-auto flex flex-col gap-6 items-stretch">
         <div class="px-4 pt-24 pb-4 classroom-background bg-cover bg-no-repeat bg-center text-white">
             <h1 class="text-2xl font-bold mb-2">My Demo Classroom</h1>
+            <!-- TODO: @malek write demo description -->
             <p class="text-sm">**Add demo description**</p>
         </div>
 
@@ -25,9 +28,9 @@
 
                 <div class="flex gap-3 ml-auto">
                     <!-- TODO @liam: import quiz functionality -->
-                    <UiButton color="green">+ Add Quiz</UiButton>
+                    <UiButton color="green" @click="modalActive = true">+ Add Quiz</UiButton>
                     <!-- TODO @liam: import folder functionality -->
-                    <UiButton color="green">+ Import Folder</UiButton>
+                    <UiButton color="green" @click="modalActive = true">+ Import Folder</UiButton>
                 </div>
             </div>
 
@@ -47,8 +50,7 @@
             <!-- show quizzes in selected folder -->
             <div v-if="availableQuizzes.length"
                 class="flex flex-wrap gap-2">
-                <!-- TODO @liam: take quiz -->
-                <!-- TODO @malek: show quizzes based on what tab youre in (show quizzes without folder first) -->
+                <!-- TODO @liam: take quiz @dblclick -->
                 <UiQuizCard v-for="quiz in quizzesInTab" :key="quiz.id"
                     title="Click to take quiz" />
             </div>
@@ -99,11 +101,11 @@
 const tabs = ref(["All", "Science", "Math"]);
 const selectedTab = ref("All");
 const availableQuizzes = ref([
-    {
-        id: 1,
-        title: "click to take quiz",
-        folder: null
-    },
+    // {
+    //     id: 1,
+    //     title: "click to take quiz",
+    //     folder: null
+    // },
 ]);
 
 const quizzesInTab = computed( () => {
@@ -134,12 +136,76 @@ const completedQuizzes = ref([
         avg_grade: "79%",
         submitted: "12/13",
         status: "Completed",
+        grades: [
+            { 
+                student: "John Smith",
+                date_completed: "2023-03-01T10:00:00",
+                score: "8/10",
+                grade: 80
+            },
+            { 
+                student: "Jane Doe",
+                date_completed: "2023-03-01T10:15:00",
+                score: "6/10",
+                grade: 60
+            },
+            { 
+                student: "Bob Johnson",
+                date_completed: "2023-03-01T10:30:00",
+                score: "9/10",
+                grade: 90
+            },
+            { 
+                student: "Sara Lee",
+                date_completed: "2023-03-01T10:45:00",
+                score: "5/10",
+                grade: 50
+            },
+            { 
+                student: "Tom Green",
+                date_completed: "2023-03-01T11:00:00",
+                score: "10/10",
+                grade: 100
+            }
+        ]
     },
     {
         title: "Week 2 Quiz",
         submitted: "11/13",
         avg_grade: "83%",
         status: "Completed",
+        grades: [
+            { 
+                student: "John Smith",
+                date_completed: "2023-03-08T09:30:00",
+                score: "7/10",
+                grade: 70
+            },
+            { 
+                student: "Jane Doe",
+                date_completed: "2023-03-08T09:45:00",
+                score: "8/10",
+                grade: 80
+            },
+            { 
+                student: "Bob Johnson",
+                date_completed: "2023-03-08T10:00:00",
+                score: "6/10",
+                grade: 60
+            },
+            { 
+                student: "Sara Lee",
+                date_completed: "2023-03-08T10:15:00",
+                score: "9/10",
+                grade: 90
+            },
+            { 
+                student: "Tom Green",
+                date_completed: "2023-03-08T10:30:00",
+                score: "5/10",
+                grade: 50
+            }
+        ]
     },
 ])
 
