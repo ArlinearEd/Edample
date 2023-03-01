@@ -10,7 +10,7 @@ const props = defineProps({
         required: false,
     },
     shadow: {
-        type: Boolean, // makes button fully rounded
+        type: Boolean, 
         default: false,
         required: false,
     },
@@ -38,7 +38,7 @@ const props = defineProps({
 
 <template>
     <button
-        class="inline-flex flex-row items-center py-1.5 px-3.5 cursor-pointer font-bold"
+        class="inline-flex flex-row items-center py-1 px-5 cursor-pointer "
         :class="[
             color,
             rounded ? ' rounded-full border-solid border border-gray-200' : ' rounded',
@@ -66,7 +66,7 @@ button {
 /* button background colors */
 .green {
     color: #ffffff;
-    background-color: #4db857;
+    background-color: #3db149;
     &:hover {
         background-color: #379440;
     }
@@ -93,9 +93,6 @@ button {
     }
 }
 
-/* icon 
-nuxt-img ref https://image.nuxtjs.org/components/nuxt-img 
-*/
 .icon {
     width: 1.3em;
 }

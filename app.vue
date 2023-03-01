@@ -16,7 +16,7 @@
       crossorigin="anonymous"
   />
 
-  <div class="bg-gray-50">
+  <div class="bg-gray-50 min-h-screen">
       <NuxtLayout>
           <NuxtPage />
       </NuxtLayout>

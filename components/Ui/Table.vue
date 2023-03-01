@@ -26,19 +26,10 @@ const emit = defineEmits(["update:sort"]);
                     v-for="(column, i) in columns"
                     :key="column"
                     :align="alignment[i]"
-                    @click="emit('update:sort', { asc: !sort.asc, col: column.value })"
                 >
                     <div
-                        class="w-fit font-bold rounded cursor-pointer select-none hover:bg-stone-100 py-1 px-1.5 my-0.5"
-                        :class="{ 'bg-stone-100': sort.col == column.value }"
+                        class="w-fit font-bold py-1 my-0.5"
                     >
-                        <img
-                            v-show="sort.col == column.value"
-                            src="/images/icons/arrow-up.svg"
-                            alt="ascending"
-                            class="w-3.5 mr-0.5 inline-block"
-                            :class="{ 'rotate-180': sort.asc }"
-                        />
                         {{ column.label }}
                     </div>
                 </th>

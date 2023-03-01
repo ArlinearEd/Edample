@@ -1,17 +1,21 @@
 <template>
-    <tr class="row hover:bg-stone-50 focus:bg-stone-50 cursor-pointer" tabindex="0" data-cy="quiz">
+    <tr class="row hover:bg-stone-50 cursor-pointer" tabindex="0">
         <!-- quiz icon -->
         <td
             align="center"
             class="w-[5rem] cursor-grab"
         >
             <img src="/images/icons/quiz.svg" class="w-5 unselected" alt="quiz" draggable="false" />
-            <img src="/images/icons/quiz-selected.svg" class="w-5 selected" alt="quiz" draggable="false" />
         </td>
 
         <!-- title -->
-        <td>
+        <td  nowrap="nowrap">
             <span class="inline-block w-full bg-transparent">{{quiz.title}}</span>
+        </td>
+
+        <!-- submitted -->
+        <td align="center" class="opacity-75 font-bold text-lg w-40">
+            {{ quiz.submitted }}
         </td>
 
         <!-- avg grade -->
@@ -22,6 +26,8 @@
         <!-- quiz status -->
         <td align="center" class="w-40">
             <UiStatusLabel color="green">Completed</UiStatusLabel>
+        </td>
+        <td>
         </td>
 
     </tr>
@@ -35,22 +41,3 @@ const props = defineProps({
     },
 });
 </script>
-
-<style>
-.row:focus {
-    color: #2b4f86;
-}
-.row:focus-visible {
-    outline: solid 2px #5288ec;
-}
-.row:not(:focus) .selected,
-.row:focus .unselected {
-    display: none;
-}
-.row:focus .selected {
-    display: block;
-}
-.row:focus .title {
-    font-weight: bold;
-}
-</style>
