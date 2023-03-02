@@ -7,11 +7,10 @@
 
     <UiBox class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3/4 max-w-4xl z-20"
         shadow full_width>
-        <div class="pb-2">
+        <div>
             <span @click="$emit('update:modalActive', false)"
                 class="cursor-pointer text-gray-700 hover:opacity-80 block w-fit ml-auto text-2xl -translate-2">x</span>
         </div>
-        {{ modalActive }}
         <!-- slot content here -->
         <slot />
     </UiBox>

@@ -43,7 +43,7 @@ const props = defineProps({
             color,
             rounded ? ' rounded-full border-solid border border-gray-200' : ' rounded',
             shadow ? 'shadow-sm' : '',
-            loading ? 'disabled' : '',
+            loading ? 'opacity-70 pointer-events-none' : '',
         ]"
         :disabled="loading"
     >
