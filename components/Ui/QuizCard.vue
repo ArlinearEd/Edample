@@ -15,6 +15,10 @@ const props = defineProps({
         default: "/images/quiz-default.jpg",
         required: false,
     },
+    quiz: {
+        type: Object,
+        required: true,
+    }
 });
 </script>
 
@@ -24,6 +28,7 @@ const props = defineProps({
         @keydown.enter="(event) => event.target.click()"
         class="quizCard border-2 border-gray-200 rounded-lg cursor-pointer min-w-[10rem] w-40 h-fit"
         :title="title"
+        @click="navigateTo('/take-quiz/' + quiz.api_key)"
     >
         <div
             :style="{ backgroundImage: 'url(/images/icons/quiz.svg)' }"

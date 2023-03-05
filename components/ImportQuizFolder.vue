@@ -8,7 +8,7 @@
             placeholder="Get Quiz/Folder by Key"
             class="input-border cursor-text w-full max-w-[20rem]"
             @keydown.enter="getQuizzes()"
-            @input="searchedQuizzes = []"
+            @input="searchedQuizzes = null"
         />
         <UiButton 
             @click="getQuizzes()"
@@ -22,7 +22,7 @@
     <div class="flex flex-col justify-center mt-6 mb-4">
 
         <!-- instructions on how to import quiz/key -->
-        <p v-if="!searchedQuizzes.length && !loading"
+        <p v-if="!searchedQuizzes && !loading"
             class="text-center text-gray-800">
             <h6 class="font-bold mb-2">How to import a quiz:</h6>
             <ol class="list-decimal list-inside">
@@ -51,16 +51,16 @@
         </div>
         
         <!-- quiz results -->
-        <div v-if="searchedQuizzes.length && !loading" 
+        <div v-if="searchedQuizzes && !loading" 
             class="flex flex-col justify-center">
 
-            <p v-if="searchedQuizzes[0].folder"
+            <!-- <p v-if="searchedQuizzes[0].folder"
                 class="text-center text-gray-800 text-md mb-4">
                 Importing folder: <span class="font-bold">{{searchedQuizzes[0].folder}}</span> & all of its' quizzes.
-            </p>
+            </p> -->
 
             <div class="flex justify-center items-center gap-2">
-                <UiQuizCard v-for="quiz in searchedQuizzes.slice(0,4)" :key="quiz.id" 
+                <UiQuizCard v-for="quiz in searchedQuizzes.slice(0,4)" :key="quiz.api_key" 
                     :title="quiz.title" />
                     <p v-if="searchedQuizzes.length > 4"
                         class='text-sm text-gray-800'>& {{searchedQuizzes.length - 4}} more</p>
@@ -79,42 +79,39 @@
 </template>
 
 <script setup>
+import { fetchQuizzesFromFolder } from "@arlinear/quiz";
 
 const loading = ref(false);
 
 const quizFolderKey = ref('');
-const searchedQuizzes = ref([]);
+const searchedQuizzes = ref(null);
 
-const getQuizzes = () => {
+const selectedFolder = ref(null);
 
+const getQuizzes = async () => {
     loading.value = true;
 
-    // @liam: get quizzes from library
-    // save to local storage in order to display then in Demo Course Page
-    setTimeout(()=>{
-        searchedQuizzes.value = [
-            {
-                id: 1,
-                title: 'Quiz 1',
-                // folder: "bruh"
-            },
-            {
-                id: 2,
-                title: 'Quiz 2',
-            },
-            {
-                id: 3,
-                title: 'Quiz 3',
-            },
-        ];
-        loading.value = false;
-    }, 1500);
+    const response = await fetchQuizzesFromFolder(quizFolderKey.value);
+    loading.value = false;
+
+    if(typeof response != typeof []) {
+        return;
+    }
+    searchedQuizzes.value = response.quizzes;
+    selectedFolder.value = response;
+
 }
 
+const emit = defineEmits(['addedFolder']);
 const addQuizzesToClassroom = () => {
     // @liam: add quizzes to classroom
-    // save to local storage in order to display then in Demo Course Page
+    if(typeof selectedFolder.value == typeof []) {
+        emit ('addedFolder', selectedFolder.value);
+    }
     alert("Quizzes added to classroom")
+
+    selectedFolder.value = null;
+    searchedQuizzes.value = null;
 
     //@malek close modal
 }
