@@ -2,7 +2,9 @@
     <div>
         <UiModal v-model:modalActive="modalActive">
             <!-- Import Quiz/Folder  -->
-            <ImportQuizFolder v-if="modalContent == 'import'" @addedFolder="folders.push($event)"/>
+            <ImportQuizFolder v-if="modalContent == 'import'" 
+                @addedFolder="folders.push($event)"
+                @closeModal="modalActive = false"/>
 
             <!-- View Grades -->
             <ViewGrades v-else-if="modalContent == 'grades'" :quiz="selectedQuiz" />
@@ -43,7 +45,7 @@
                         {{ folder.name }}
                     </div>
 
-                    <div class="p-3 border-b-[2px] cursor-pointer grow border-gray-300"></div>
+                    <div class="p-3 border-b-[2px] grow border-gray-300"></div>
                 </div>
 
                 <!-- show quizzes in selected folder -->
@@ -104,13 +106,7 @@ for (let i = 0; i < folders.value.length; i++) {
 
 
 // available quizzes tabs
-const availableQuizzes = ref([
-    {
-        id: 1,
-        title: "click to take quiz",
-        folder: null,
-    },
-]);
+const availableQuizzes = ref([]);
 
 const quizzesInTab = computed(() => {
     // if all tab is selected, show all quizzes (+ show quizzes without folder first)
