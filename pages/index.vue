@@ -90,6 +90,7 @@
 <script setup>
 import { fetchQuizzesFromFolder } from "@arlinear/quiz";
 
+
 const folders = useCookie("folders");
 const selectedTab = ref(0);
 

@@ -1,6 +1,6 @@
 <template>
     bruh
-    <ArlinearQuiz :quizKey="quizKey" />
+    <ArlinearQuiz :quizKey="quizKey" :primaryKey="yourName"/>
     <!-- ba777045-7033-4701-b17b-da9e90dcd41e -->
     <NuxtLink to="/">Home</NuxtLink>
 
@@ -12,6 +12,13 @@ import "@arlinear/quiz/dist/style.css";
 
 const route = useRoute();
 const quizKey = route.params.id;
+const names = [
+    "Malek",
+    "Alyssa",
+    "Liam",
+    "Emma"
+]
+const yourName = ref(names[Math.floor(Math.random() * names.length)])
 
 
 </script>
