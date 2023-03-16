@@ -81,6 +81,7 @@
 <script setup>
 import { fetchQuizzesFromFolder } from "@arlinear/quiz";
 
+
 const loading = ref(false);
 
 const quizFolderKey = ref('');
@@ -90,8 +91,14 @@ const selectedFolder = ref(null);
 
 const getQuizzes = async () => {
     loading.value = true;
-
-    const response = await fetchQuizzesFromFolder(quizFolderKey.value);
+    let response;
+    try {
+        response = await fetchQuizzesFromFolder(quizFolderKey.value);
+    } catch (error) {
+        // if error assume its a quiz key. TODO actual error handling
+        emit('addQuiz', quizFolderKey.value);
+        console.log(error);
+    }
     loading.value = false;
 
     if(typeof response != typeof []) {
@@ -102,9 +109,8 @@ const getQuizzes = async () => {
 
 }
 
-const emit = defineEmits(['addedFolder']);
+const emit = defineEmits(['addedFolder', 'addQuiz']);
 const addQuizzesToClassroom = () => {
-    // @liam: add quizzes to classroom
     if(typeof selectedFolder.value == typeof []) {
         emit ('addedFolder', selectedFolder.value);
     }
@@ -115,6 +121,11 @@ const addQuizzesToClassroom = () => {
 
     //@malek close modal
 }
+
+const addSingleQuiz = (quiz) => {
+    emit('addQuiz', quiz);
+}
+
 </script>
 
 <style scoped>

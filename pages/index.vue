@@ -2,7 +2,11 @@
     <div>
         <UiModal v-model:modalActive="modalActive">
             <!-- Import Quiz/Folder  -->
-            <ImportQuizFolder v-if="modalContent == 'import'" @addedFolder="folders.push($event)"/>
+            <ImportQuizFolder
+                v-if="modalContent == 'import'"
+                @addedFolder="folders.push($event)"
+                @addQuiz="availableQuizzes.push({ title: 'TODO: quiz name', api_key: $event })"
+            />
 
             <!-- View Grades -->
             <ViewGrades v-else-if="modalContent == 'grades'" :quiz="selectedQuiz" />
@@ -24,17 +28,14 @@
                     <h4 class="text-xl">Available Quizzes</h4>
 
                     <div class="flex gap-3 ml-auto">
-                        <!-- TODO @liam: import quiz functionality -->
-                        <UiButton color="green" @click="openModal('import')">+ Add Quiz</UiButton>
-                        <!-- TODO @liam: import folder functionality -->
-                        <UiButton color="green" @click="openModal('import')">+ Import Folder</UiButton>
+                        <UiButton color="green" @click="openModal('import')">+ Import</UiButton>
                     </div>
                 </div>
 
                 <!-- toggle folder -->
                 <div v-if="availableQuizzes.length" class="flex items-end mt-1 mb-3">
                     <div
-                        v-for="folder, idx in [{ name: 'All'}].concat(folders)"
+                        v-for="(folder, idx) in [{ name: 'All' }].concat(folders)"
                         :key="folder"
                         @click="selectedTab = idx"
                         :class="[idx == selectedTab ? 'border-blue-500 font-bold' : 'border-gray-300']"
@@ -48,9 +49,8 @@
 
                 <!-- show quizzes in selected folder -->
                 <div v-if="availableQuizzes.length" class="flex flex-wrap gap-2">
-                    <!-- TODO @liam: take quiz -->
                     <!-- TODO @malek: show quizzes based on what tab youre in (show quizzes without folder first) -->
-                    <UiQuizCard v-for="quiz in quizzesInTab" :key="quiz.id" :title="quiz.title" :quiz="quiz"/>
+                    <UiQuizCard v-for="quiz in quizzesInTab" :key="quiz.id" :title="quiz.title" :quiz="quiz" />
                 </div>
                 <p v-else class="text-md text-gray-500 text-center mx-auto my-12">
                     Add some quizzes to build your classroom. <br />
@@ -102,19 +102,16 @@ for (let i = 0; i < folders.value.length; i++) {
     folders.value[i] = await fetchQuizzesFromFolder(folders.value[i].api_key);
 }
 
-
 // available quizzes tabs
-const availableQuizzes = ref([
-    {
-        id: 1,
-        title: "click to take quiz",
-        folder: null,
-    },
-]);
+const availableQuizzes = useCookie("quizzes");
+
+if(!availableQuizzes.value) {
+    availableQuizzes.value = [];
+}
 
 const quizzesInTab = computed(() => {
     // if all tab is selected, show all quizzes (+ show quizzes without folder first)
-    if (selectedTab.value ==0) {
+    if (selectedTab.value == 0) {
         return availableQuizzes.value.filter((a) => a.folder == null);
     }
 
