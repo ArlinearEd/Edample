@@ -6,6 +6,7 @@
                 v-if="modalContent == 'import'"
                 @addedFolder="folders.push($event)"
                 @addQuiz="availableQuizzes.push({ title: 'TODO: quiz name', api_key: $event })"
+                @closeModal="modalActive = false"
             />
 
             <!-- View Grades -->
@@ -44,7 +45,7 @@
                         {{ folder.name }}
                     </div>
 
-                    <div class="p-3 border-b-[2px] cursor-pointer grow border-gray-300"></div>
+                    <div class="p-3 border-b-[2px] grow border-gray-300"></div>
                 </div>
 
                 <!-- show quizzes in selected folder -->
@@ -90,7 +91,6 @@
 <script setup>
 import { fetchQuizzesFromFolder } from "@arlinear/quiz";
 
-
 const folders = useCookie("folders");
 const selectedTab = ref(0);
 
@@ -106,7 +106,7 @@ for (let i = 0; i < folders.value.length; i++) {
 // available quizzes tabs
 const availableQuizzes = useCookie("quizzes");
 
-if(!availableQuizzes.value) {
+if (!availableQuizzes.value) {
     availableQuizzes.value = [];
 }
 

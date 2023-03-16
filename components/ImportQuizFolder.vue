@@ -109,7 +109,7 @@ const getQuizzes = async () => {
 
 }
 
-const emit = defineEmits(['addedFolder', 'addQuiz']);
+const emit = defineEmits(['addedFolder', "closeModal", 'addQuiz']);
 const addQuizzesToClassroom = () => {
     if(typeof selectedFolder.value == typeof []) {
         emit ('addedFolder', selectedFolder.value);
@@ -119,12 +119,9 @@ const addQuizzesToClassroom = () => {
     selectedFolder.value = null;
     searchedQuizzes.value = null;
 
-    //@malek close modal
+    emit('closeModal');
 }
 
-const addSingleQuiz = (quiz) => {
-    emit('addQuiz', quiz);
-}
 
 </script>
 
