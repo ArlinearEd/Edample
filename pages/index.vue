@@ -34,7 +34,7 @@
                 </div>
 
                 <!-- toggle folder -->
-                <div v-if="availableQuizzes.length" class="flex items-end mt-1 mb-3">
+                <div class="flex items-end mt-1 mb-3">
                     <div
                         v-for="(folder, idx) in [{ name: 'All' }].concat(folders)"
                         :key="folder"
@@ -49,7 +49,7 @@
                 </div>
 
                 <!-- show quizzes in selected folder -->
-                <div v-if="availableQuizzes.length" class="flex flex-wrap gap-2">
+                <div v-if="quizzesInTab.length || availableQuizzes.length"  class="flex flex-wrap gap-2">
                     <!-- TODO @malek: show quizzes based on what tab youre in (show quizzes without folder first) -->
                     <UiQuizCard v-for="quiz in quizzesInTab" :key="quiz.id" :title="quiz.title" :quiz="quiz" />
                 </div>
@@ -84,6 +84,7 @@
                     </UiTable>
                 </div>
             </UiBox>
+            {{ availableQuizzes }}
         </div>
     </div>
 </template>

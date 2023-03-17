@@ -92,6 +92,7 @@ const selectedFolder = ref(null);
 const getQuizzes = async () => {
     loading.value = true;
     let response;
+    console.log(quizFolderKey.value)
     try {
         response = await fetchQuizzesFromFolder(quizFolderKey.value);
     } catch (error) {
@@ -99,9 +100,12 @@ const getQuizzes = async () => {
         emit('addQuiz', quizFolderKey.value);
         console.log(error);
     }
+    console.log("ruh");
+    
     loading.value = false;
 
     if(typeof response != typeof []) {
+        emit('addQuiz', quizFolderKey.value);
         return;
     }
     searchedQuizzes.value = response.quizzes;
