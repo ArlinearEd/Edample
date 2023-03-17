@@ -49,7 +49,7 @@
                 </div>
 
                 <!-- show quizzes in selected folder -->
-                <div v-if="quizzesInTab.length || availableQuizzes.length"  class="flex flex-wrap gap-2">
+                <div v-if="quizzesInTab.length || availableQuizzes.length" class="flex flex-wrap gap-2">
                     <!-- TODO @malek: show quizzes based on what tab youre in (show quizzes without folder first) -->
                     <UiQuizCard v-for="quiz in quizzesInTab" :key="quiz.id" :title="quiz.title" :quiz="quiz" />
                 </div>
@@ -84,8 +84,9 @@
                     </UiTable>
                 </div>
             </UiBox>
-            {{ availableQuizzes }}
         </div>
+        <!-- Text input when user clicks enter send value to downloadGrades function -->
+        <input type="text" @keyup.enter="downloadGrades" />
     </div>
 </template>
 
@@ -157,6 +158,42 @@ const openModal = (content, quiz) => {
     modalContent.value = content;
     modalActive.value = true;
 };
+
+async function downloadGrades(event) {
+    const apiKey = event.target.value;
+    const rows = [["Name", "Grade", "Date"]];
+
+    for (let i = 0; i < folders.value.length; i++) {
+        for (let j = 0; j < folders.value[i].quizzes.length; j++) {
+            await fetch("https://vtufvyfrupbmqthveiyy.functions.supabase.co/grade-fetch", {
+                method: "POST",
+                body: JSON.stringify({
+                    apiKey: apiKey,
+                    quizKey: folders.value[i].quizzes[j].api_key,
+                }),
+            })
+                .then((response) => response.json())
+                .then((entries) => {
+                    entries.forEach((entry) => {
+                        rows.push([entry.primaryKey, (entry.mark / entry.markOutOf) * 100, entry.createdAt]);
+                    });
+                    console.log(rows);
+                });
+        }
+    }
+
+    let csv = "";
+    rows.forEach((row) => {
+        csv += row.join(",");
+        csv += "\n";
+    });
+
+    const anchor = document.createElement("a");
+    anchor.href = "data:text/csv;charset=utf-8," + encodeURIComponent(csv);
+    anchor.target = "_blank";
+    anchor.download = "grades.csv";
+    anchor.click();
+}
 </script>
 
 <style scoped>
