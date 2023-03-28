@@ -31,7 +31,7 @@
                 <li>Click the blue "Share" button.</li>
                 <li>Set the quiz sharing from "No one" to "Anyone" & copy the quiz key.</li>
                 <li>Paste the key in the search bar</li>
-                <li>Click the "Get Quizzes" button</li>
+                <li>Click the "Get Quiz" button</li>
             </ol>
         </p>
 
