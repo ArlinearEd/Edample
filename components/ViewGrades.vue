@@ -1,6 +1,6 @@
 <template>
     <h2 class="text-xl text-center font-bold">Grades for {{quiz.title}}</h2>
-
+    <UiButton @click="downloadGrades(grades)" class="mt-4 mx-auto" color="green">Download Grades as CSV</UiButton>
     <UiTable
             v-if="!loading"
             :columns="tableColumns"
@@ -93,4 +93,8 @@ const prettyQuizDate = (rawDate) => {
     let formattedDate = useDateFormat(new Date(rawDate), "MMM D, YYYY (h:mm A)");
     return formattedDate.value.replace('"', "");
 };
+
+const downloadGrades = (grades) => {
+    alert("Downloading grades...")
+}
 </script>

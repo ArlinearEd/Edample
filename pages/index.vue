@@ -4,8 +4,14 @@
             <!-- Import Quiz/Folder  -->
             <ImportQuizFolder
                 v-if="modalContent == 'import'"
-                @addedFolder="folders.push($event)"
-                @addQuiz="availableQuizzes.push({ title: 'TODO: quiz name', api_key: $event })"
+                @addedFolder="() => {
+                    folders.push($event);
+                    modalActive = false;
+                }"
+                @addQuiz="() => {
+                    availableQuizzes.push({ title: 'TODO: quiz name', api_key: $event }); 
+                    modalActive = false;
+                }"
                 @closeModal="modalActive = false"
             />
 
@@ -29,12 +35,13 @@
                     <h4 class="text-xl">Available Quizzes</h4>
 
                     <div class="flex gap-3 ml-auto">
-                        <UiButton color="green" @click="openModal('import')">+ Import</UiButton>
+                        <UiButton color="green" @click="openModal('import')">+ Import Quiz</UiButton>
                     </div>
                 </div>
 
                 <!-- toggle folder -->
-                <div class="flex items-end mt-1 mb-3">
+                <div v-if="quizzesInTab.length || availableQuizzes.length"
+                    class="flex items-end mt-1 mb-3">
                     <div
                         v-for="(folder, idx) in [{ name: 'All' }].concat(folders)"
                         :key="folder"
@@ -57,9 +64,9 @@
                     Add some quizzes to build your classroom. <br />
                     <br />
                     You can... <br />
-                    1. Add a single quiz <br />
+                    1. Add a single quiz (Quiz must be share-able to anyone) <br />
                     2. Import multiple quizzes from a folder in
-                    <a class="text-blue-600 underline" href="/library" target="_blank">your Library</a>
+                    <a class="text-blue-600 underline" href="https://app.arlinear.com/library" target="_blank">your Library</a>
                 </p>
             </UiBox>
 
@@ -85,8 +92,6 @@
                 </div>
             </UiBox>
         </div>
-        <!-- Text input when user clicks enter send value to downloadGrades function -->
-        <input type="text" @keyup.enter="downloadGrades" />
     </div>
 </template>
 

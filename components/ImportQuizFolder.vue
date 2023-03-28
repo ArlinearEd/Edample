@@ -15,7 +15,7 @@
             class="py-[6.5px] px-6"
             :loading="loading"
             color="blue">
-            {{ loading ? 'Searching...' : '+ Get Quizzes' }}
+            {{ loading ? 'Searching...' : '+ Get Quiz' }}
         </UiButton>
     </div>
 
@@ -26,9 +26,10 @@
             class="text-center text-gray-800">
             <h6 class="font-bold mb-2">How to import a quiz:</h6>
             <ol class="list-decimal list-inside">
-                <li>Go to <a class="text-blue-600 underline" href="/library" target="_blank">your Library</a></li>
-                <li>Click on the Quiz or Folder you'd like to import</li>
-                <li>Click "Share" & copy the key.</li>
+                <li>Go to <a class="text-blue-600 underline" href="https://app.arlinear.com/library" target="_blank">your Library</a></li>
+                <li>Click on the Quiz or Folder you'd like to import.</li>
+                <li>Click the blue "Share" button.</li>
+                <li>Set the quiz sharing from "No one" to "Anyone" & copy the quiz key.</li>
                 <li>Paste the key in the search bar</li>
                 <li>Click the "Get Quizzes" button</li>
             </ol>
