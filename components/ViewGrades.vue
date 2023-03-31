@@ -1,6 +1,7 @@
 <template>
+<div class="flex flex-col justify-center">
     <h2 class="text-xl text-center font-bold">Grades for {{quiz.title}}</h2>
-    <UiButton @click="downloadGrades(grades)" class="mt-4 mx-auto" color="green">Download Grades as CSV</UiButton>
+    <UiButton @click="downloadGrades(grades)" class="mt-3 mx-auto" color="green">Download Grades as CSV</UiButton>
     <UiTable
             v-if="!loading"
             :columns="tableColumns"
@@ -35,6 +36,7 @@
 
             </tr>
     </UiTable>
+</div>
 </template>
 
 <script setup>
