@@ -19,10 +19,10 @@
     "@jridgewell/gen-mapping" "^0.1.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@arlinear/quiz@^0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@arlinear/quiz/-/quiz-0.2.1.tgz#bcdef6f4a0cfbd2023978399fbaa10cd331fe439"
-  integrity sha512-1ywyAmyHEDQftiZFxSpvPl837vGPNzwKjw6wJ6UriaW9bzOyqDHYaEmQR2xFLLq7RjqdOEYS8JWIDVF1uDldbg==
+"@arlinear/quiz@^0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@arlinear/quiz/-/quiz-0.2.2.tgz#918154a971e5e274217617155a0beb33ab4aace4"
+  integrity sha512-yCpZIk9TId+gWMqL8/FT6GKePGYUwE7EORi2Z/l8aq7WLNGE2/kNhXHzduUT0MA03coTVkO83+9gYLAZhBJ/8g==
   dependencies:
     "@vue/cli-service" "^5.0.8"
     katex "^0.16.3"
