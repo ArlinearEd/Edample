@@ -109,7 +109,7 @@ const getQuizzes = async () => {
     loading.value = false;
 
     if(typeof response != typeof []) {
-        emit('addQuiz', {api_key: quizFolderKey.value, title: metaData.data.title});
+        emit('addQuiz', {api_key: quizFolderKey.value, title: metaData.body.title});
         return;
     }
     searchedQuizzes.value = response.quizzes;
