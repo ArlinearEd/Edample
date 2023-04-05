@@ -80,7 +80,7 @@
 </template>
 
 <script setup>
-import { fetchQuizzesFromFolder } from "@arlinear/quiz";
+import { fetchQuizzesFromFolder, getQuizMetadata } from "@arlinear/quiz";
 
 
 const loading = ref(false);
@@ -97,16 +97,19 @@ const getQuizzes = async () => {
     try {
         response = await fetchQuizzesFromFolder(quizFolderKey.value);
     } catch (error) {
-        // if error assume its a quiz key. TODO actual error handling
-        emit('addQuiz', quizFolderKey.value);
-        console.log(error);
+        // if error assume its a quiz key. 
     }
-    console.log("ruh");
     
+    const metaData = await getQuizMetadata(quizFolderKey.value);
+    if(metaData.status != 200) {
+        loading.value = false;
+        return;
+    }
+
     loading.value = false;
 
     if(typeof response != typeof []) {
-        emit('addQuiz', quizFolderKey.value);
+        emit('addQuiz', {api_key: quizFolderKey.value, title: metaData.data.title});
         return;
     }
     searchedQuizzes.value = response.quizzes;
