@@ -7,5 +7,17 @@ export default defineNuxtConfig({
             }
         }
     },
+    css: ['~/assets/css/main.css'],
+    postcss: {
+        plugins: {
+          tailwindcss: {},
+          autoprefixer: {},
+        },
+    },
     ssr : false,
+    app: {
+        head: {
+          title: 'Arlinear API Demo',
+        }
+    }
 })

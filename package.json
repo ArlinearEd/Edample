@@ -11,6 +11,11 @@
     "nuxt": "^3.1.2"
   },
   "dependencies": {
-    "@arlinear/quiz": "^0.2.1"
+    "@arlinear/quiz": "^0.2.1",
+    "@vueuse/core": "^9.13.0",
+    "autoprefixer": "^10.4.13",
+    "postcss": "^8.4.21",
+    "sass": "^1.58.3",
+    "tailwindcss": "^3.2.7"
   }
 }
