@@ -23,10 +23,6 @@
             {{ quiz.avg_grade }}
         </td>
 
-        <!-- quiz status -->
-        <td align="center" class="w-40">
-            <UiStatusLabel color="green">Completed</UiStatusLabel>
-        </td>
         <td>
         </td>
 
