@@ -8,8 +8,8 @@
                     folders.push($event);
                     modalActive = false;
                 }"
-                @addQuiz="() => {
-                    availableQuizzes.push({ title: 'TODO: quiz name', api_key: $event }); 
+                @addQuiz="($event) => {
+                    availableQuizzes.push($event); 
                     modalActive = false;
                 }"
                 @closeModal="modalActive = false"
@@ -100,6 +100,7 @@ import { fetchQuizzesFromFolder } from "@arlinear/quiz";
 
 const folders = useCookie("folders");
 const selectedTab = ref(0);
+
 
 if (!folders.value) {
     folders.value = [];
