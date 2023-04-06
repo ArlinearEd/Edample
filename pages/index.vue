@@ -113,7 +113,6 @@ if (!folders.value) {
 
 // update folder content on page refresh
 for (let i = 0; i < folders.value.length; i++) {
-    console.log(folders.value);
     folders.value[i] = await fetchQuizzesFromFolder(folders.value[i].api_key);
 }
 
