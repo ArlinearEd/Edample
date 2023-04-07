@@ -144,7 +144,12 @@ const tableColumns = ref([
 const submissions = useCookie("submissions");
 
 if (!submissions.value) {
-    submissions.value = [];
+    submissions.value = [ 
+        { "title": "Sample Quiz", "score": "0/10", "grade": 0, "student": "Alyssa" } ,
+        { "title": "Sample Quiz", "score": "5/10", "grade": 50, "student": "Malek" },
+        { "title": "Sample Quiz", "score": "7/10", "grade": 70, "student": "John" } ,
+        { "title": "Sample Quiz", "score": "9/10", "grade": 90, "student": "Liam" } 
+    ];
 }
 
 //count submissions of same title

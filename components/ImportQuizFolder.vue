@@ -116,7 +116,7 @@ const getQuizMetadata = async (quizKey) => {
         body: JSON.stringify({
             quizKey,
         })
-    }).catch(() => {})
+    })
 }
 
 const  fetchQuizzesFromFolder = async (folderKey) => {
@@ -125,7 +125,7 @@ const  fetchQuizzesFromFolder = async (folderKey) => {
         body: JSON.stringify({
              folderKey,
         })
-    }).catch(() => {})
+    })
 }
 
 const emit = defineEmits(['addedFolder', "closeModal", 'addQuiz']);
