@@ -75,7 +75,6 @@
 </template>
 
 <script setup>
-import { fetchQuizzesFromFolder, getQuizMetadata } from "@arlinear/quiz";
 
 
 const loading = ref(false);
@@ -91,28 +90,42 @@ const selectedFolder = ref(null);
  */
 const getQuizzes = async () => {
     loading.value = true;
-    let response;
     const metaData = await getQuizMetadata(quizFolderKey.value);
-    try {
-        response = await fetchQuizzesFromFolder(quizFolderKey.value);
-    } catch (error) {
-        // if error check if its a quiz key. 
-        if(metaData.status != 200) {
-            loading.value = false;
-            return;
-        }
-    }
-    
+    const folderResponse = await fetchQuizzesFromFolder(quizFolderKey.value);
     loading.value = false;
 
-    if(typeof response != typeof []) {
+    if(metaData.status === 200) {
+        const body = await metaData.json();
+
         //response is just a quiz, add it.
-        emit('addQuiz', {api_key: quizFolderKey.value, title: metaData.body.title});
+        emit('addQuiz', {api_key: quizFolderKey.value, title: body.title});
         return;
     }
-    searchedQuizzes.value = response.quizzes;
-    selectedFolder.value = response;
 
+    if(folderResponse.status === 200) {
+        const body = await folderResponse.json();
+        searchedQuizzes.value = body.quizzes;
+        selectedFolder.value = body;
+        return;
+    }
+}
+
+const getQuizMetadata = async (quizKey) => {
+    return await fetch('https://vtufvyfrupbmqthveiyy.functions.supabase.co/get-quiz-metadata', {
+        method: 'POST',
+        body: JSON.stringify({
+            quizKey,
+        })
+    }).catch(() => {})
+}
+
+const  fetchQuizzesFromFolder = async (folderKey) => {
+    return await fetch('https://vtufvyfrupbmqthveiyy.functions.supabase.co/fetch-folder', {
+        method: 'POST',
+        body: JSON.stringify({
+             folderKey,
+        })
+    }).catch(() => {})
 }
 
 const emit = defineEmits(['addedFolder', "closeModal", 'addQuiz']);
