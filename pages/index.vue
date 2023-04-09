@@ -24,9 +24,10 @@
         <div class="w-full max-w-[1000px] mx-auto flex flex-col gap-6 items-stretch">
             <div class="px-4 pt-24 pb-4 classroom-background bg-cover bg-no-repeat bg-center text-white">
                 <h1 class="text-2xl font-bold mb-2">My Demo Classroom</h1>
-                <p class="text-sm">
+                <p class="text-sm font-normal">
                     Welcome teachers! We've set up a demo classroom to give you a taste of how Arlinear's quizzing and
-                    grading system can simplify your LMS platform.
+                    grading system can simplify your LMS platform. <br>
+                    You can view the <a class="font-bold underline" href="https://github.com/ArlinearEd/Edample" target="_blank">Edample source code here</a>.
                 </p>
             </div>
 
