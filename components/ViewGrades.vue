@@ -1,7 +1,7 @@
 <template>
 <div class="flex flex-col justify-center">
     <h2 class="text-xl text-center font-bold">Grades for {{quiz.title}}</h2>
-    <UiButton @click="downloadGrades(grades)" class="mt-3 mx-auto" color="green">Download Grades as CSV</UiButton>
+    <UiButton @click="downloadGrades(submissions)" class="mt-3 mx-auto" color="green">Download Grades as CSV</UiButton>
     <UiTable
             v-if="!loading"
             :columns="tableColumns"
@@ -10,17 +10,12 @@
         >
 
             <!-- v-for="submission in quiz.grades" -->
-            <tr v-for="submission, i in grades.sort((a, b) => b.grade - a.grade)" :key="i"
+            <tr v-for="submission, i in submissions" :key="i"
                 class="border-t border-gray-100 hover:bg-stone-50" tabindex="0">
 
                 <!-- student name -->
                 <td align="left" nowrap="nowrap">
                     <span class="inline-block w-full bg-transparent">{{submission.student}}</span>
-                </td>
-
-                <!-- date completed -->
-                <td align="center" class="opacity-75 w-40">
-                    {{prettyQuizDate(submission.date_completed)}} 
                 </td>
 
                 <!-- score -->
@@ -40,63 +35,37 @@
 </template>
 
 <script setup>
-import { useDateFormat } from "@vueuse/core";
-
 const props = defineProps({
     quiz: {
         type: Boolean,
         default: false,
     },
+    submissions: {
+        type: Array,
+    }
 });
+
 
 const tableColumns = ref([
     { label: "Name", value: "name" },
-    { label: "Date Completed", value: "date" },
     { label: "Score", value: "grade" },
     { label: "Grade", value: "percentage" },
     { label: "", value: "" },
 ]);
 
-const grades = ref([
-    { 
-        student: "John Smith",
-        date_completed: "2023-03-08T09:30:00",
-        score: "7/10",
-        grade: 70
-    },
-    { 
-        student: "Jane Doe",
-        date_completed: "2023-03-08T09:45:00",
-        score: "8/10",
-        grade: 80
-    },
-    { 
-        student: "Bob Johnson",
-        date_completed: "2023-03-08T10:00:00",
-        score: "6/10",
-        grade: 60
-    },
-    { 
-        student: "Sara Lee",
-        date_completed: "2023-03-08T10:15:00",
-        score: "9/10",
-        grade: 90
-    },
-    { 
-        student: "Tom Green",
-        date_completed: "2023-03-08T10:30:00",
-        score: "5/10",
-        grade: 50
-    }
-])
 
-const prettyQuizDate = (rawDate) => {
-    if (!rawDate) return;
-    let formattedDate = useDateFormat(new Date(rawDate), "MMM D, YYYY (h:mm A)");
-    return formattedDate.value.replace('"', "");
-};
 
 const downloadGrades = (grades) => {
-    alert("Downloading grades...")
+    //convert grades.value to csv and download
+    let csv = "Student,Score,Grade\n";
+    grades.forEach((row) => {
+        csv += row.student + "," + row.score + "," + row.grade + "\n";
+    });
+
+    let hiddenElement = document.createElement("a");
+    hiddenElement.href = "data:text/csv;charset=utf-8," + encodeURI(csv);
+    hiddenElement.target = "_blank";
+    hiddenElement.download = "grades.csv";
+    hiddenElement.click();
 }
 </script>

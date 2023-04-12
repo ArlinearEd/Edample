@@ -55,11 +55,6 @@
         <div v-if="searchedQuizzes && !loading" 
             class="flex flex-col justify-center">
 
-            <!-- <p v-if="searchedQuizzes[0].folder"
-                class="text-center text-gray-800 text-md mb-4">
-                Importing folder: <span class="font-bold">{{searchedQuizzes[0].folder}}</span> & all of its' quizzes.
-            </p> -->
-
             <div class="flex justify-center items-center gap-2">
                 <UiQuizCard v-for="quiz in searchedQuizzes.slice(0,4)" :key="quiz.api_key" 
                     :title="quiz.title" />
@@ -80,7 +75,6 @@
 </template>
 
 <script setup>
-import { fetchQuizzesFromFolder, getQuizMetadata } from "@arlinear/quiz";
 
 
 const loading = ref(false);
@@ -90,31 +84,48 @@ const searchedQuizzes = ref(null);
 
 const selectedFolder = ref(null);
 
+/**
+ * Users inputs either a quiz key or a folder key.
+ * If its a folder key, it will fetch all the quizzes in the folder, and display them.
+ */
 const getQuizzes = async () => {
     loading.value = true;
-    let response;
-    console.log(quizFolderKey.value)
-    try {
-        response = await fetchQuizzesFromFolder(quizFolderKey.value);
-    } catch (error) {
-        // if error assume its a quiz key. 
-    }
-    
     const metaData = await getQuizMetadata(quizFolderKey.value);
-    if(metaData.status != 200) {
-        loading.value = false;
-        return;
-    }
-
+    const folderResponse = await fetchQuizzesFromFolder(quizFolderKey.value);
     loading.value = false;
 
-    if(typeof response != typeof []) {
-        emit('addQuiz', {api_key: quizFolderKey.value, title: metaData.body.title});
+    if(metaData.status === 200) {
+        const body = await metaData.json();
+
+        //response is just a quiz, add it.
+        emit('addQuiz', {api_key: quizFolderKey.value, title: body.title});
         return;
     }
-    searchedQuizzes.value = response.quizzes;
-    selectedFolder.value = response;
 
+    if(folderResponse.status === 200) {
+        const body = await folderResponse.json();
+        searchedQuizzes.value = body.quizzes;
+        selectedFolder.value = body;
+        return;
+    }
+}
+
+const getQuizMetadata = async (quizKey) => {
+    return await fetch('https://vtufvyfrupbmqthveiyy.functions.supabase.co/get-quiz-metadata', {
+        method: 'POST',
+        body: JSON.stringify({
+            quizKey,
+        })
+    })
+}
+
+const  fetchQuizzesFromFolder = async (folderKey) => {
+    return await fetch('https://vtufvyfrupbmqthveiyy.functions.supabase.co/fetch-folder', {
+        method: 'POST',
+        body: JSON.stringify({
+             folderKey,
+        })
+    })
 }
 
 const emit = defineEmits(['addedFolder', "closeModal", 'addQuiz']);

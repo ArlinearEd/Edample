@@ -4,19 +4,23 @@
             <!-- Import Quiz/Folder  -->
             <ImportQuizFolder
                 v-if="modalContent == 'import'"
-                @addedFolder="() => {
-                    folders.push($event);
-                    modalActive = false;
-                }"
-                @addQuiz="($event) => {
-                    availableQuizzes.push($event); 
-                    modalActive = false;
-                }"
+                @addedFolder="
+                    ($event) => {
+                        folders.push($event);
+                        modalActive = false;
+                    }
+                "
+                @addQuiz="
+                    ($event) => {
+                        availableQuizzes.push($event);
+                        modalActive = false;
+                    }
+                "
                 @closeModal="modalActive = false"
             />
 
             <!-- View Grades -->
-            <ViewGrades v-else-if="modalContent == 'grades'" :quiz="selectedQuiz" />
+            <ViewGrades v-else-if="modalContent == 'grades'" :quiz="selectedQuiz"  :submissions="submissions.filter((s) => s.title === selectedQuiz.title)"/>
         </UiModal>
 
         <UiHeader />
@@ -41,8 +45,7 @@
                 </div>
 
                 <!-- toggle folder -->
-                <div v-if="quizzesInTab.length || availableQuizzes.length"
-                    class="flex items-end mt-1 mb-3">
+                <div class="flex items-end mt-1 mb-3">
                     <div
                         v-for="(folder, idx) in [{ name: 'All' }].concat(folders)"
                         :key="folder"
@@ -67,7 +70,9 @@
                     You can... <br />
                     1. Add a single quiz (Quiz must be share-able to anyone) <br />
                     2. Import multiple quizzes from a folder in
-                    <a class="text-blue-600 underline" href="https://app.arlinear.com/library" target="_blank">your Library</a>
+                    <a class="text-blue-600 underline" href="https://app.arlinear.com/library" target="_blank"
+                        >your Library</a
+                    >
                 </p>
             </UiBox>
 
@@ -87,6 +92,7 @@
                             @click="openModal('grades', quiz)"
                             v-for="quiz in completedQuizzes"
                             :quiz="quiz"
+                           
                             :key="quiz.id"
                         />
                     </UiTable>
@@ -101,7 +107,6 @@ import { fetchQuizzesFromFolder } from "@arlinear/quiz";
 
 const folders = useCookie("folders");
 const selectedTab = ref(0);
-
 
 if (!folders.value) {
     folders.value = [];
@@ -134,23 +139,42 @@ const tableColumns = ref([
     { label: "Name", value: "title" },
     { label: "Total Submissions", value: "submitted" },
     { label: "AVG Grade", value: "avg_grade" },
-    { label: "Status", value: "status" },
     { label: "", value: "" },
 ]);
-const completedQuizzes = ref([
-    {
-        title: "Week 1 Quiz",
-        avg_grade: "79%",
-        submitted: "12/13",
-        status: "Completed",
-    },
-    {
-        title: "Week 2 Quiz",
-        submitted: "11/13",
-        avg_grade: "83%",
-        status: "Completed",
-    },
-]);
+
+const submissions = useCookie("submissions");
+
+if (!submissions.value) {
+    submissions.value = [ 
+        { "title": "Sample Quiz", "score": "0/10", "grade": 0, "student": "Alyssa" } ,
+        { "title": "Sample Quiz", "score": "5/10", "grade": 50, "student": "Malek" },
+        { "title": "Sample Quiz", "score": "7/10", "grade": 70, "student": "John" } ,
+        { "title": "Sample Quiz", "score": "9/10", "grade": 90, "student": "Liam" } 
+    ];
+}
+
+//count submissions of same title
+const completedQuizzes = submissions.value.reduce((acc, curr) => {
+    const index = acc.findIndex((a) => a.title == curr.title);
+
+    if (index == -1) {
+        acc.push({
+            title: curr.title,
+            submitted: 1,
+            grades: [curr.grade],
+        });
+    } else {
+        acc[index].submitted++;
+        acc[index].grades.push(curr.grade);
+    }
+
+    return acc;
+}, []);
+
+// for each completed quiz, set avg_grade
+completedQuizzes.forEach((quiz) => {
+    quiz.avg_grade = quiz.grades.reduce((a, b) => a + b, 0) / quiz.grades.length;
+});
 
 // modal (for quiz/folder crud && completed quiz grades)
 const modalActive = ref(false);
@@ -165,42 +189,6 @@ const openModal = (content, quiz) => {
     modalContent.value = content;
     modalActive.value = true;
 };
-
-async function downloadGrades(event) {
-    const apiKey = event.target.value;
-    const rows = [["Name", "Grade", "Date"]];
-
-    for (let i = 0; i < folders.value.length; i++) {
-        for (let j = 0; j < folders.value[i].quizzes.length; j++) {
-            await fetch("https://vtufvyfrupbmqthveiyy.functions.supabase.co/grade-fetch", {
-                method: "POST",
-                body: JSON.stringify({
-                    apiKey: apiKey,
-                    quizKey: folders.value[i].quizzes[j].api_key,
-                }),
-            })
-                .then((response) => response.json())
-                .then((entries) => {
-                    entries.forEach((entry) => {
-                        rows.push([entry.primaryKey, (entry.mark / entry.markOutOf) * 100, entry.createdAt]);
-                    });
-                    console.log(rows);
-                });
-        }
-    }
-
-    let csv = "";
-    rows.forEach((row) => {
-        csv += row.join(",");
-        csv += "\n";
-    });
-
-    const anchor = document.createElement("a");
-    anchor.href = "data:text/csv;charset=utf-8," + encodeURIComponent(csv);
-    anchor.target = "_blank";
-    anchor.download = "grades.csv";
-    anchor.click();
-}
 </script>
 
 <style scoped>
