@@ -170,6 +170,11 @@ const completedQuizzes = submissions.value.reduce((acc, curr) => {
     return acc;
 }, []);
 
+// for each completed quiz, set avg_grade
+completedQuizzes.forEach((quiz) => {
+    quiz.avg_grade = quiz.grades.reduce((a, b) => a + b, 0) / quiz.grades.length;
+});
+
 // modal (for quiz/folder crud && completed quiz grades)
 const modalActive = ref(false);
 // modalContent == "import" || "grades"
